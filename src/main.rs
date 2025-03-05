@@ -24,7 +24,7 @@ fn main() {
 
         // Ensure the prompt appears before user input is taken
         io::stdout().flush().unwrap();
-        
+
         // Read the user input from the console
         io::stdin()
             .read_line(&mut input)
@@ -47,25 +47,29 @@ fn main() {
         // Clear the screen, then attempt to parse and execute the command based on arguments
         clear_screen();
 
-
-        println!("{:?}\n", taskcli::Command::from_args(&args)); // Print the result of the command parsing
-
-        
-
+        match taskcli::Command::from_args(&args) {
+            Some(taskcli::Command::ShowLists()) => {
+                // Show lists action
+                println!("Displaying the lists...");
+            }
+            Some(taskcli::Command::NewList(name)) => {
+                // Create a new list with the given name
+                println!("Creating a new list: {name}");
+            }
+            Some(taskcli::Command::RenameList(from_name, to_name)) => {
+                // Rename a list with the given name
+                println!("Renaming list {from_name} to: {to_name}");
+            }
+            Some(taskcli::Command::DeleteList(name)) => {
+                // Delete a list with the given name
+                println!("Deleting list: {name}");
+            }
+            Some(taskcli::Command::UndefinedCommand(undefined_command)) => {
+                // Undefined Command
+                println!("{undefined_command}");
+            }
+        }
         // Optional delay to avoid flickering and allow the user to read the output
         sleep(Duration::from_millis(200));
     }
 }
-
-                // Get the first element from the 'date' slice if it exists
-                // If no date is provided, fallback to the current date (formatted in DATE_FORMAT)
-                // let date = date.first()
-                //    .map(|&d| d.to_string())  // If a date is provided, convert it to a String
-                //    .unwrap_or_else(|| Local::now().format(DATE_FORMAT).to_string()); // Default to today's date if no date is given
-
-                // Validate if the provided date is valid (matches the expected date format)
-                //if is_valid_date(&date) {
-                //    return Some(Command::New(date)); // Return a new `Command::New` with the validated date
-                //} else {
-                //    println!("{}", INVALID_DATE); // If invalid, print an error message
-                //}
