@@ -46,9 +46,26 @@ fn main() {
 
         // Clear the screen, then attempt to parse and execute the command based on arguments
         clear_screen();
+
+
         println!("{:?}\n", taskcli::Command::from_args(&args)); // Print the result of the command parsing
+
+        
 
         // Optional delay to avoid flickering and allow the user to read the output
         sleep(Duration::from_millis(200));
     }
 }
+
+                // Get the first element from the 'date' slice if it exists
+                // If no date is provided, fallback to the current date (formatted in DATE_FORMAT)
+                // let date = date.first()
+                //    .map(|&d| d.to_string())  // If a date is provided, convert it to a String
+                //    .unwrap_or_else(|| Local::now().format(DATE_FORMAT).to_string()); // Default to today's date if no date is given
+
+                // Validate if the provided date is valid (matches the expected date format)
+                //if is_valid_date(&date) {
+                //    return Some(Command::New(date)); // Return a new `Command::New` with the validated date
+                //} else {
+                //    println!("{}", INVALID_DATE); // If invalid, print an error message
+                //}
