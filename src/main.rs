@@ -1,5 +1,9 @@
-mod taskcli; // Import the taskcli module where the Command enum and parsing logic are defined
+use lists; // Import the lists module
+use taskcli; // Import the taskcli module
+
+use std::env;
 use std::io::{self, Write}; // Import necessary modules for handling input/output operations
+use std::path::{Path, PathBuf}; // `Path` and `PathBuf` to manage file paths
 use std::thread::sleep; // Import sleep to introduce delays
 use std::time::Duration; // Import Duration to specify the length of sleep
 
@@ -47,6 +51,12 @@ fn main() {
         // Clear the screen, then attempt to parse and execute the command based on arguments
         clear_screen();
 
+        let program_path: Result<PathBuf, std::io::Error> = Ok(env::current_dir().unwrap());
+        println!(
+            "Current program path: {:#?}",
+            program_path.expect("REASON").display()
+        );
+
         match taskcli::Command::from_args(&args) {
             Some(taskcli::Command::ShowLists()) => {
                 // Show lists action
@@ -55,6 +65,10 @@ fn main() {
             Some(taskcli::Command::NewList(name)) => {
                 // Create a new list with the given name
                 println!("Creating a new list: {name}");
+                match lists::List::new_list("../todo_cli/src/lists", &name) {
+                    Ok(_) => println!("Successfully created the list: {name}\n"),
+                    Err(e) => eprintln!("Error creating list '{name}': {e}\n"),
+                }
             }
             Some(taskcli::Command::RenameList(from_name, to_name)) => {
                 // Rename a list with the given name
@@ -67,6 +81,9 @@ fn main() {
             Some(taskcli::Command::UndefinedCommand(undefined_command)) => {
                 // Undefined Command
                 println!("{undefined_command}");
+            }
+            None => {
+                continue;
             }
         }
         // Optional delay to avoid flickering and allow the user to read the output
